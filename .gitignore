@@ -1,2 +1,13 @@
 .DS_Store
 *.pyc
+
+.project
+.pydevproject
+*komodo*
+*.pyc
+*.db
+*.log
+.svn
+*uploads
+*cache
+

@@ -1,36 +1,52 @@
 == Django Firewall ==
 
-Django Firewall is a Django middleware that lets you block visitors from accessing parts of your website. Maybe you're low on resources and need to temporarily block visitors from visiting certain pages, or you want to test something with your templates and don't want visitors to see the changes yet. Whatever the reason is, Django Firewall will let you, easily and quickly, show your visitors they have reached a restricted area.
+Django Firewall is a middleware and models app that gives you access control over your application, it can also log requests!
 
-One of the uses is if you want to set up a "beta" section on your website and give certain users access to it.
+It acts like a real firewall and log system in a lot of ways:
+    * The first rule found applys to the request, if this happens to be REJECT ALL, so be it, have fun breaking back into your site.
+    * The Log model looks pretty much like an apache access log file
 
-Features:
-    * Block and unblock on predetermined times.
-    * You can block your whole website or just parts of it.
-    * Redirect your visitors to another page/site when they try to access a blocked area.
-    * Admins won't be affected by the block (obviously).
-    * Specify paths that you want blocked (like /faq, /restricted/area).
+You can have as many rules as you like.
 
-Django Firewall requires the django.contrib.auth app because it needs to create firewall permissions.
+Rule Features:
+    * Accept, Reject, Redirect, Require Basic Auth and 404 access control
+    * Match requests against exact IP Addresses or ranges of IP Addresses
+    * Has start and stop datetimes for each rule
+    * Rules can apply to specific request paths, or multiple request paths
+    * Username and password for the Require Basic Auth rule
+    
+Django Firewall cannot:
+    * Restrict media files served outside your Django application, ie by apache, or;
+    * be expected to be production ready/safe, USE AT OWN RISK, TEST TEST TEST.
 
-For authorization, Django Firewall checks if the user is logged in first, then checks if the user has permission to access blocked paths. If these conditions are met, Django Firewall will let the user through.
+Django Firewall requires the django.contrib.auth app because it needs to create a firewall permission.
 
 REQUIREMENTS:
-1. django.contrib.auth app must be installed.
-2. django.contrib.admin app must be installed.
+1. Python 2.7 (because of ipaddr lib)
+2. Django 1.3
+3. django.contrib.auth app must be installed.
+4. django.contrib.admin app must be installed.
 
 INSTALLATION:
-1. Download the firewall app and put it in your project's folder.
-2. Add the app to your INSTALLED_APPS in your settings.py.
-3. Add 'project.firewall.middleware.FirewallMiddleware' to the MIDDLEWARE_CLASSES in your settings.py file. The middleware class must come AFTER the authorization middleware because it depends on it. Replace 'project' with your project name.
+1. Download the firewall app and put it in your project's folder or install into a virtualenv/system with $ pip install -e git://github.com/Rundll/django-firewall.git#egg=djangofirewall.
+2. Add the app to your INSTALLED_APPS in your settings.py any where under 'django.contrib.auth', 'djangofirewall'
+3. Add 'djangofirewall.middleware.FirewallMiddleware' to the MIDDLEWARE_CLASSES in your settings.py file. The middleware class must come AFTER the authorization middleware because it depends on it. If you have trouble try 'your_project_name.djangofirewall.middleware.FirewallMiddleware'.
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'project.firewall.middleware.FirewallMiddleware',
+    ...
+    'djangofirewall.middleware.FirewallMiddleware',
+    ...
 )
 4. Run ./manage.py syncdb
+5. The Admin requires some .js files which live in the static folder, and will be found by python manage.py collectstatic, otherwise move them to the correct location yourself
 
-That's it.
+SETTINGS:
+    FIREWALL_LOGGING = False # Logging is off by default, just incase someone actually uses this app in prod.
+    FIREWALL_REFRESH = datetime.timedelta(seconds=60) # Not implemented yet, intended to cache the firewall rules, reduce db hits
+    FIREWALL_REALM = 'Firewall' # Used when prompting for Basic Auth
 
-Django Firewall is still in its very early stages and if anyone has any suggestions or feedback, they are very welcome.
+That's it. Admin -> Djangofirewall -> Rules -> Add rule
+
+
