@@ -6,7 +6,7 @@ setup(
     author = "Thomas Randle",
     author_email = "thomas@tasgn.com",
     description = "A Django reusable app to help with application access control",
-    long_description = open("README").read(),
+    long_description = open("README.txt").read(),
     url = "http://github.com/Rundll/django-firewall",
     license = "BSD",
     packages = [
