@@ -32,7 +32,6 @@ class FirewallMiddleware():
             
             return self.log(request, actions.get(rule.action, None))
         except AttributeError:
-            raise
             return self.log(request, None)
     
     def create_response(self, status_code, text=''):
