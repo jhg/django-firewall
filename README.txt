@@ -30,7 +30,7 @@ REQUIREMENTS:
 INSTALLATION:
 1. Download the firewall app and put it in your project's folder or install into a virtualenv/system with $ pip install -e git://github.com/Rundll/django-firewall.git#egg=django_firewall.
 2. Add the app to your INSTALLED_APPS in your settings.py any where under 'django.contrib.auth', 'django_firewall'
-3. Add 'django_firewall.middleware.FirewallMiddleware' to the MIDDLEWARE_CLASSES in your settings.py file. The middleware class must come AFTER the authorization middleware because it depends on it. If you have trouble try 'your_project_name.djangofirewall.middleware.FirewallMiddleware'.
+3. Add 'django_firewall.middleware.FirewallMiddleware' to the MIDDLEWARE_CLASSES in your settings.py file. The middleware class must come AFTER the authorization middleware because it depends on it.
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
