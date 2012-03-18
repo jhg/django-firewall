@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name = "django-firewall",
-    version = __import__("djangofirewall").__version__,
+    version = __import__("django_firewall").__version__,
     author = "Thomas Randle",
     author_email = "thomas@tasgn.com",
     description = "A Django reusable app to help with application access control",
@@ -10,7 +10,7 @@ setup(
     url = "http://github.com/Rundll/django-firewall",
     license = "BSD",
     packages = [
-        "djangofirewall",
+        "django_firewall",
     ],
     classifiers = [
         "Development Status :: 1 - Alpha",

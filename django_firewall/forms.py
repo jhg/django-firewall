@@ -1,6 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 from django import forms
-from djangofirewall.models import Rule
+from models import Rule
 
 class RuleForm(forms.ModelForm):
     

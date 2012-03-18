@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from djangofirewall import ipaddr
+import ipaddr
 import datetime
 
 class RuleManager(models.Manager):
@@ -132,7 +132,7 @@ class Rule(models.Model):
     class Meta:
         ordering = ['position', 'is_active']
         permissions = (
-            ('firewall_by_pass', _('User can by pass all firewall rules.')),
+            ('firewall_by_pass', 'User can by pass all firewall rules.'),
         )
     
     def __unicode__(self):

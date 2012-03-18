@@ -1,8 +1,8 @@
 from django.http import HttpResponseRedirect, HttpResponse
 
-from djangofirewall.models import Rule, Log
-from djangofirewall.conf import settings
-from djangofirewall import ipaddr
+from models import Rule, Log
+from conf import settings
+import ipaddr
 
 import datetime
 import base64
@@ -11,7 +11,7 @@ class FirewallMiddleware():
     
     def process_request(self, request):
         
-        if request.user.is_authenticated() and request.user.is_active and request.user.has_perm('djangofirewall.firewall_by_pass'):
+        if request.user.is_authenticated() and request.user.is_active and request.user.has_perm('django_firewall.firewall_by_pass'):
             return None
         
         try:

@@ -1,6 +1,6 @@
 from django.contrib import admin
-from djangofirewall.models import Rule, Log
-from djangofirewall.forms import RuleForm
+from models import Rule, Log
+from forms import RuleForm
 from django.conf import settings
 
 class RuleAdmin(admin.ModelAdmin):
