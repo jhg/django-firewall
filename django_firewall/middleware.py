@@ -24,7 +24,7 @@ class FirewallMiddleware():
                 return self.log(request, None)
             
             actions = {
-                'ACCEPT': None,
+                'ACCEPT': [200],
                 'REJECT': [403, 'Forbidden'],
                 'AUTH': [401],
                 '404': [404, 'File not found'],
@@ -35,6 +35,9 @@ class FirewallMiddleware():
             return self.log(request, None)
     
     def create_response(self, status_code, text=''):
+        if status_code == 200:
+            return None
+        
         response = HttpResponse(text, content_type="text/html")
         response.status_code = status_code
         if status_code == 401:
