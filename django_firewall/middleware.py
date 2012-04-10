@@ -25,12 +25,12 @@ class FirewallMiddleware():
             
             actions = {
                 'ACCEPT': None,
-                'REJECT': self.create_response(403, 'Forbidden'),
-                'AUTH': self.create_response(401),
-                '404': self.create_response(404, 'File not found'),
+                'REJECT': [403, 'Forbidden'],
+                'AUTH': [401],
+                '404': [404, 'File not found'],
             }
             
-            return self.log(request, actions.get(rule.action, None))
+            return self.log(request, self.create_response(*actions.get(rule.action, None)))
         except AttributeError:
             return self.log(request, None)
     
