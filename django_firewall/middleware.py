@@ -12,7 +12,7 @@ class FirewallMiddleware():
     def process_request(self, request):
         
         if request.user.is_authenticated() and request.user.is_active and request.user.has_perm('django_firewall.firewall_by_pass'):
-            return None
+            return self.log(request, None)
         
         try:
             ip_address = ipaddr.IPAddress(request.META.get('REMOTE_ADDR'))
