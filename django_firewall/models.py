@@ -167,3 +167,6 @@ class Log(models.Model):
         l.client = request.META.get('HTTP_USER_AGENT', 'Not provided')[:255]
         l.save()
         return l
+
+    class Meta:
+        ordering = ['-datetime']
