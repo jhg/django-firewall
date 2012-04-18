@@ -153,9 +153,9 @@ class Log(models.Model):
     client = models.CharField(max_length=255)
     
     @staticmethod
-    def create(request, response, passed_firewall):
+    def create(request, response):
         log = Log()
-        log.passed_firewall = passed_firewall
+        log.passed_firewall = True if response.get('passed_firewall', 'True') == 'True' else False
         log.ip = request.META.get('REMOTE_ADDR', None)
         if request.POST:
             log.method = 'POST'

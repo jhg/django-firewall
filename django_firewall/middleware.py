@@ -10,13 +10,11 @@ import base64
 class FirewallMiddleware():
     
     def process_response(self, request, response):
-        passed_firewall = True if response.get('passed_firewall', 'True') == 'True' else False 
+        Log.create(request, response)
         
-        #remove our header
+        #remove our header it it exists
         if response.has_header('passed_firewall'):
             del response['passed_firewall']
-        
-        Log.create(request, response, passed_firewall)
         return response
     
     def process_request(self, request):
