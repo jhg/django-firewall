@@ -143,7 +143,7 @@ class Log(models.Model):
                ('GET', 'Get'),
                ('POST', 'POST'),
                )
-    passed_firewall = models.BooleanField()
+    passed_firewall = models.BooleanField(default=False)
     ip = models.IPAddressField(null=True, blank=True)
     datetime = models.DateTimeField(auto_now_add=True)
     method = models.CharField(max_length=4, default='GET')
@@ -153,9 +153,10 @@ class Log(models.Model):
     client = models.CharField(max_length=255)
     
     @staticmethod
-    def create(request, response, passed_firewall):
+    def create(request, response):
         l = Log()
-        l.passed_firewall = passed_firewall
+        if response.status_code == 200:
+            l.passed_firewall = True
         l.ip = request.META.get('REMOTE_ADDR', None)
         if request.POST:
             l.method = 'POST'

@@ -9,10 +9,14 @@ import base64
 
 class FirewallMiddleware():
     
+    def process_response(self, request, response):
+        Log.create(request, response)
+        return response
+    
     def process_request(self, request):
         
         if request.user.is_authenticated() and request.user.is_active and request.user.has_perm('django_firewall.firewall_by_pass'):
-            return self.log(request, None)
+            return None
         
         try:
             ip_address = ipaddr.IPAddress(request.META.get('REMOTE_ADDR'))
@@ -21,7 +25,7 @@ class FirewallMiddleware():
             
             # 301
             if rule and rule.action == 'AUTH' and self.valid_auth_request(request, rule):
-                return self.log(request, None)
+                return None
             
             actions = {
                 'ACCEPT': [200],
@@ -30,9 +34,9 @@ class FirewallMiddleware():
                 '404': [404, 'File not found'],
             }
             
-            return self.log(request, self.create_response(*actions.get(rule.action, None)))
+            return self.create_response(*actions.get(rule.action, None))
         except AttributeError:
-            return self.log(request, None)
+            return None
     
     def create_response(self, status_code, text=''):
         if status_code == 200:
@@ -43,13 +47,6 @@ class FirewallMiddleware():
         if status_code == 401:
             response['WWW-Authenticate'] = 'Basic realm="%s"' % settings.FIREWALL_REALM
         return response
-    
-    
-    def log(self, request, response):
-        if settings.FIREWALL_LOGGING:
-            Log.create(request, response, True if response is None else False)
-        return response
-        #return None
     
     def valid_auth_request(self, request, rule):
         if 'HTTP_AUTHORIZATION' in request.META:
