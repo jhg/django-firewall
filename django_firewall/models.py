@@ -143,7 +143,7 @@ class Log(models.Model):
                ('GET', 'Get'),
                ('POST', 'POST'),
                )
-    passed_firewall = models.BooleanField(default=False)
+    passed_firewall = models.BooleanField()
     ip = models.IPAddressField(null=True, blank=True)
     datetime = models.DateTimeField(auto_now_add=True)
     method = models.CharField(max_length=4, default='GET')
@@ -153,20 +153,19 @@ class Log(models.Model):
     client = models.CharField(max_length=255)
     
     @staticmethod
-    def create(request, response):
-        l = Log()
-        if response.status_code == 200:
-            l.passed_firewall = True
-        l.ip = request.META.get('REMOTE_ADDR', None)
+    def create(request, response, passed_firewall):
+        log = Log()
+        log.passed_firewall = passed_firewall
+        log.ip = request.META.get('REMOTE_ADDR', None)
         if request.POST:
-            l.method = 'POST'
-        l.path = request.path
-        l.http_version = request.META.get('SERVER_PROTOCOL', None)[:20]
+            log.method = 'POST'
+        log.path = request.path
+        log.http_version = request.META.get('SERVER_PROTOCOL', None)[:20]
         if response is not None:
-            l.response_status_code = response.status_code
-        l.client = request.META.get('HTTP_USER_AGENT', 'Not provided')[:255]
-        l.save()
-        return l
+            log.response_status_code = response.status_code
+        log.client = request.META.get('HTTP_USER_AGENT', 'Not provided')[:255]
+        log.save()
+        return log
 
     class Meta:
         ordering = ['-datetime']

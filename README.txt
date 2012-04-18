@@ -15,8 +15,7 @@ Rule Features:
     * Username and password for the Require Basic Auth rule
     
 Django Firewall cannot:
-    * Restrict media files served outside your Django application, ie by apache, or;
-    * be expected to be production ready/safe, USE AT OWN RISK, TEST TEST TEST.
+    * Restrict media files served outside your Django application, ie by apache
 
 Django Firewall requires the django.contrib.auth app because it needs to create a firewall permission.
 
@@ -38,7 +37,7 @@ MIDDLEWARE_CLASSES = (
     'django_firewall.middleware.FirewallMiddleware',
     ...
 )
-4. Run ./manage.py syncdb
+4. Run $ python manage.py syncdb
 5. The Admin requires some .js files which live in the static folder, and will be found by python manage.py collectstatic, otherwise move them to the correct location yourself
 
 SETTINGS:
