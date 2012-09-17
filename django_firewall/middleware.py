@@ -1,18 +1,19 @@
 from django.http import HttpResponseRedirect, HttpResponse
 
-from models import Rule, Log
-from conf import settings
+from .models import Rule, Log
+from .conf import settings
 import ipaddr
 
 import datetime
 import base64
 
-class FirewallMiddleware():
-    
+class FirewallMiddleware(object):
+
     def process_response(self, request, response):
-        Log.create(request, response)
+        if settings.FIREWALL_LOGGING:
+            Log.create(request, response)
         
-        #remove our header it it exists
+        # remove our header if it exists
         if response.has_header('passed_firewall'):
             del response['passed_firewall']
         return response
